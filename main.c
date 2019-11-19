@@ -5,10 +5,23 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <unistd.h>
+#include <errno.h>
+#include <string.h>
 
-int main() {
+int main(int argc, char *argv[]) {
+  DIR * folder;
+  if (argc > 1) {
+    folder = opendir(argv[1]);
+    if (errno != 0) {
+      printf("Error: %s\n",strerror(errno));
+      return 0;
+    }
+  }
+  else {
+    //printf("%d\n", errno);
+    folder = opendir("./");
+  }
   printf("Directory Statistics:\n");
-  DIR * folder = opendir("./");
   int size = 0;
   struct dirent *file = readdir(folder);
   printf("Folders:\n");
